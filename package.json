@@ -1,7 +1,7 @@
 {
   "name": "password-checker",
   "description": "Check passwords against different rules and word lists",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "keywords": [
     "password",
     "check",
