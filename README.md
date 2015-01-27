@@ -87,6 +87,7 @@ A list of rules and whether they failed will also be accessible.
 
 #### A check without errors
 ```JavaScript
+checker.min_length = 10;
 console.log(checker.check('Should work'));
 // Prints:
 // true
@@ -97,7 +98,11 @@ console.log(checker.errors);
 
 console.log(checker.rules);
 // Prints:
-// { min_length: { [Function] failed: true } }
+// { min_length: 
+//    { name: 'min_length',
+//      method: [Function],
+//      error_message: null,
+//      failed: false } }
 ```
 
 #### A check with errors
@@ -113,7 +118,11 @@ console.log(checker.errors);
 
 console.log(checker.rules);
 // Prints:
-// { min_length: { [Function] failed: false } }
+// { min_length: 
+//    { name: 'min_length',
+//      method: [Function],
+//      error_message: 'The password is too short',
+//      failed: true } }
 ```
 
 ## The word lists
