@@ -1,0 +1,35 @@
+{
+  "name": "password-checker",
+  "description": "Check passwords against different rules and word lists",
+  "version": "0.1.0",
+  "keywords": [
+    "password",
+    "check",
+    "checker"
+  ],
+  "author": "Nosco",
+  "maintainers": [
+    {
+      "name": "Dan Larsen",
+      "email": "dan@nos.co",
+      "url": "https://github.com/morphar"
+    }
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha --reporter spec --timeout 300000 ./test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/nosco/password-checker.git"
+  },
+  "github": "http://github.com/nosco/password-checker",
+  "bugs": {
+    "mail": "",
+    "url": "http://github.com/nosco/password-checker/issues"
+  }
+}
