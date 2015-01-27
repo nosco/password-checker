@@ -22,33 +22,16 @@ var PasswordChecker = function() {
   this.min_length = 8;
   this.max_length = 0;
 
+  // Update word lists
   Object.defineProperties(this, {
     'disallowed_words': {
-      set: function(words) {
-        self.words = words;
-        for(var i in self.words) {
-          self.words[i] = self.words[i].toLowerCase()
-        }
-        self.words_tree = trees.arrayToTree(words, true, 3);
-      }
+      set: self.updateList.bind(self, 'words')
     },
     'disallowed_names': {
-      set: function(names) {
-        self.names = names;
-        for(var i in self.names) {
-          self.names[i] = self.names[i].toLowerCase()
-        }
-        self.names_tree = trees.arrayToTree(names, true, 3);
-      }
+      set: self.updateList.bind(self, 'names')
     },
     'disallowed_passwords': {
-      set: function(passwords) {
-        self.passwords = passwords;
-        for(var i in self.passwords) {
-          self.passwords[i] = self.passwords[i].toLowerCase()
-        }
-        self.passwords_tree = trees.arrayToTree(passwords, true, 3);
-      }
+      set: self.updateList.bind(self, 'passwords')
     }
   });
 
@@ -57,6 +40,18 @@ var PasswordChecker = function() {
 };
 module.exports = PasswordChecker;
 
+/**
+ * Update the words in a list and update the _tree version of the list
+ * @param  {string} list_name Name of the list to update
+ * @param  {array}  list      List of the names that should be in the list
+ */
+PasswordChecker.prototype.updateList = function(list_name, list) {
+  this[list_name] = list;
+  for(var i in this[list_name]) {
+    this[list_name][i] = this[list_name][i].toLowerCase()
+  }
+  this[list_name+'_tree'] = trees.arrayToTree(this[list_name], true);
+};
 PasswordChecker.prototype.check = function(password, cb) {
   this.errors = [];
   this.password = password;
