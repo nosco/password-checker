@@ -7,9 +7,11 @@ var passwords = require('./lib/passwords-10000.mod.js');
 var PasswordChecker = function() {
   var self = this;
 
+  // Holds errors from the last check
   this.errors = [];
   this.password = null;
 
+  // Defaults
   this.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   this.numbers = "0123456789";
   this.symbols = "_-!\"?$%^&*()+={}[]:;@'~#|<>,.?\\/ ";
@@ -35,7 +37,7 @@ var PasswordChecker = function() {
     }
   });
 
-  // Currently set rules
+  // Current rules and results of the last check if any
   this.rules = {};
 };
 module.exports = PasswordChecker;
@@ -52,6 +54,14 @@ PasswordChecker.prototype.updateList = function(list_name, list) {
   }
   this[list_name+'_tree'] = trees.arrayToTree(this[list_name], true);
 };
+
+
+/**
+ * Check a password by running any rules set
+ * @param  {string}   password The password to test
+ * @param  {Function} cb       Optional callback function
+ * @return {boolean}           Returns true when all rules pass and false if any fails
+ */
 PasswordChecker.prototype.check = function(password, cb) {
   this.errors = [];
   this.password = password;
@@ -122,9 +132,9 @@ PasswordChecker.prototype.requireNumbersOrSymbols = function(active) {
 
 /**
  * Check the password against the names list
- * @param  {boolean} active     true|false
- * @param  {boolean} in_password also check if the words are IN the password
- * @param  {number} len minimum length of words to check for if in_password == true
+ * @param  {boolean} active      true|false
+ * @param  {boolean} in_password Also check if the words are IN the password
+ * @param  {number}  len         Minimum length of words to check for if in_password == true
  */
 PasswordChecker.prototype.disallowNames = function(active, in_password, len) {
   if(active) this.rules.disallow_names = this.checkNames.bind(this, !!in_password, len);
@@ -133,9 +143,9 @@ PasswordChecker.prototype.disallowNames = function(active, in_password, len) {
 
 /**
  * Check the password against the words list
- * @param  {boolean} active     true|false
- * @param  {boolean} in_password also check if the words are IN the password
- * @param  {number} len minimum length of words to check for if in_password == true
+ * @param  {boolean} active      true|false
+ * @param  {boolean} in_password Also check if the words are IN the password
+ * @param  {number}  len         Minimum length of words to check for if in_password == true
  */
 PasswordChecker.prototype.disallowWords = function(active, in_password, len) {
   if(active) this.rules.disallow_words = this.checkWords.bind(this, !!in_password, len);
@@ -144,9 +154,9 @@ PasswordChecker.prototype.disallowWords = function(active, in_password, len) {
 
 /**
  * Check the password against the passwords list
- * @param  {boolean} active     true|false
- * @param  {boolean} in_password also check if the words are IN the password
- * @param  {number} len minimum length of words to check for if in_password == true
+ * @param  {boolean} active      true|false
+ * @param  {boolean} in_password Also check if the words are IN the password
+ * @param  {number} len          Minimum length of words to check for if in_password == true
  */
 PasswordChecker.prototype.disallowPasswords = function(active, in_password, len) {
   len = (typeof len === 'undefined') ? len : 4;
@@ -228,9 +238,9 @@ PasswordChecker.prototype.checkNumbersOrSymbols = function() {
 
 /**
  * Check if password is a name from the disallowed names list
- * @param  {boolean} in_password Also check if names are in the password
- * @param  {number} min_word_length minimum length of words to check for if in_password == true
- * @return {Error} if any matches was found
+ * @param  {boolean} in_password     Also check if names are in the password
+ * @param  {number}  min_word_length Minimum length of words to check for if in_password == true
+ * @return {Error}                   If any matches was found
  */
 PasswordChecker.prototype.checkNames = function(in_password, min_word_length) {
   if(in_password && this.hasWordInList(this.names, min_word_length)) {
@@ -242,9 +252,9 @@ PasswordChecker.prototype.checkNames = function(in_password, min_word_length) {
 
 /**
  * Check if password is a word from the disallowed words list
- * @param  {boolean} in_password Also check if words are in the password
- * @param  {number} min_word_length minimum length of words to check for if in_password == true
- * @return {Error} if any matches was found
+ * @param  {boolean} in_password    Also check if words are in the password
+ * @param  {number} min_word_length Minimum length of words to check for if in_password == true
+ * @return {Error}                  If any matches was found
  */
 PasswordChecker.prototype.checkWords = function(in_password, min_word_length) {
   if(in_password && this.hasWordInList(this.words, min_word_length)) {
@@ -256,9 +266,9 @@ PasswordChecker.prototype.checkWords = function(in_password, min_word_length) {
 
 /**
  * Check if password is a password from the disallowed passwords list
- * @param  {boolean} in_password Also check if passwords are in the password
- * @param  {number} min_word_length minimum length of words to check for if in_password == true
- * @return {Error} if any matches was found
+ * @param  {boolean} in_password    Also check if words are in the password
+ * @param  {number} min_word_length Minimum length of words to check for if in_password == true
+ * @return {Error}                  If any matches was found
  */
 PasswordChecker.prototype.checkPasswords = function(in_password, min_word_length) {
   if(in_password && this.hasWordInList(this.passwords, min_word_length)) {
@@ -274,9 +284,9 @@ PasswordChecker.prototype.checkPasswords = function(in_password, min_word_length
 
 /**
  * Check if password is in a list
- * @param  {array}  list The list to check the password against
- * @param  {number}  min_word_length [4] Only check words of this length
- * @return {Boolean}      true if in list, false if not in list
+ * @param  {array}   list            The list to check the password against
+ * @param  {number}  min_word_length Default is 4 - Only check words of this length
+ * @return {Boolean}                 true if in list, false if not in list
  */
 PasswordChecker.prototype.hasWordInList = function(list, min_word_length) {
   min_word_length = (typeof min_word_length !== 'undefined') ? min_word_length : 4;
@@ -291,8 +301,8 @@ PasswordChecker.prototype.hasWordInList = function(list, min_word_length) {
 
 /**
  * Check if password is in a list
- * @param  {words list}  list_tree The list tree to check the password against
- * @return {Boolean}      true if in list, false if not in list
+ * @param  {words list} list_tree The list tree to check the password against
+ * @return {Boolean}              true if in list, false if not in list
  */
 PasswordChecker.prototype.wordInList = function(list_tree) {
   var str = this.password.toLowerCase();
