@@ -21,7 +21,7 @@ var PasswordChecker = function() {
   this.words_tree = trees.arrayToTree(this.words, true, 3);
   this.names_tree = trees.arrayToTree(this.names, true, 3);
   this.passwords_tree = trees.arrayToTree(this.passwords, true, 3);
-  this.min_length = 8;
+  this.min_length = 0;
   this.max_length = 0;
 
   // Update word lists
