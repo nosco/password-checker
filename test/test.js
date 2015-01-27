@@ -36,7 +36,68 @@ describe('Length rules', function () {
 });
 
 
-describe('Check against numbers, letters and symbols', function () {
+describe('Check against default numbers, letters and symbols', function () {
+  describe('Required letters rule', function () {
+    it('Should fail when missing letters', function () {
+      checker.requireLetters(true);
+      assert.notEqual(checker.check('123456789'), true, 'Password "123456789" should not pass');
+      checker.requireLetters(false);
+    });
+
+    it('Should succeed when having letters', function () {
+      checker.requireLetters(true);
+      assert.strictEqual(checker.check('password'), true, 'Password "password" should pass');
+      checker.requireLetters(false);
+    });
+  });
+
+  describe('Required numbers rule', function () {
+    it('Should fail when missing numbers', function () {
+      checker.requireNumbers(true);
+      assert.notEqual(checker.check('password'), true, 'Password "password" should not pass');
+      checker.requireNumbers(false);
+    });
+
+    it('Should succeed when having numbers', function () {
+      checker.requireNumbers(true);
+      assert.strictEqual(checker.check('123456789'), true, 'Password "123456789" should pass');
+      checker.requireNumbers(false);
+    });
+  });
+
+  describe('Required symbols rule', function () {
+    it('Should fail when missing symbols', function () {
+      checker.requireSymbols(true);
+      assert.notEqual(checker.check('abc123'), true, 'Password "abc123" should not pass');
+      checker.requireSymbols(false);
+    });
+
+    it('Should succeed when having symbols', function () {
+      checker.requireSymbols(true);
+      assert.strictEqual(checker.check('abc_123'), true, 'Password "abc_123" should pass');
+      checker.requireSymbols(false);
+    });
+  });
+
+  describe('Required numbers and/or symbols rule', function () {
+    it('Should fail when missing numbers and/or symbols', function () {
+      checker.requireNumbersOrSymbols(true);
+      assert.notEqual(checker.check('abcdef'), true, 'Password "abcdef" should not pass');
+      checker.requireNumbersOrSymbols(false);
+    });
+
+    it('Should succeed when having numbers and/or symbols', function () {
+      checker.requireNumbersOrSymbols(true);
+      assert.strictEqual(checker.check('abc_123'), true, 'Password "abc_123" should pass');
+      assert.strictEqual(checker.check('abc123'), true, 'Password "abc123" should pass');
+      assert.strictEqual(checker.check('abc_'), true, 'Password "abc_" should pass');
+      checker.requireNumbersOrSymbols(false);
+    });
+  });
+});
+
+
+describe('Check against custom numbers, letters and symbols', function () {
   describe('Required letters rule', function () {
     before(function() {
       checker.allowed_letters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnpqrstuvwxyz'; // Without IOijlo
