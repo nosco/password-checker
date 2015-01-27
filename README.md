@@ -7,37 +7,7 @@ The checker works out of the box, but will accept any password at all.
 
 You need to enable rules and change the words lists, if you don't want to use the defaults.
 
-## The word lists
-### Words
-The words list is the first 10.000 words found in a list of 1/3 million words list.
-
-The 1/3 million list is create by Peter Norvig who is Director of Research @ Google.
-
-The entire list can be found here: [Natural Language Corpus Data: Beautiful Data](http://norvig.com/ngrams/) - the file is called [count_1w.txt](http://norvig.com/ngrams/count_1w.txt)
-
-Thank you Peter Norvig!
-
- 
-### Names
-The names list is a mashup of different sources and contains 97871 international names:
-
-[US Names from the US Social Security](http://www.ssa.gov/oact/babynames/limits.html)
-
-["Given names" extracted from WikiPedia](http://en.wikipedia.org/w/api.php?action=query&continue=&list=categorymembers&cmnamespace=0&cmlimit=500&cmtitle=Category:Given_names&format=json)
-
-[International names extracted from Baby Name Wizard](http://www.babynamewizard.com/international-names-lists-popular-names-from-around-the-world)
-
-Thank you US Social Security, WikiPedia and Baby Name Wizard! 
-
-### Passwords
-
-Passwords is a list of the 10.000 most used passwords according to Mark Burnett from [xato.net](http://xato.net).
-
-You can find the list (+1 with frequency) in [this blog post by Mark Burnett](https://xato.net/passwords/more-top-worst-passwords/).
-
-Thank you Mark Burnett!
-
-## API
+## The API
 
 #### Initialize
 ```JavaScript
@@ -148,3 +118,32 @@ console.log(checker.rules);
 // { min_length: { [Function] failed: false } }
 ```
 
+## The word lists
+### Words
+The words list is the first 10.000 words found in a list of 1/3 million words list.
+
+The 1/3 million list is create by Peter Norvig who is Director of Research @ Google.
+
+The entire list can be found here: [Natural Language Corpus Data: Beautiful Data](http://norvig.com/ngrams/) - the file is called [count_1w.txt](http://norvig.com/ngrams/count_1w.txt)
+
+Thank you Peter Norvig!
+
+ 
+### Names
+The names list is a mashup of different sources and contains 97871 international names:
+
+[US Names from the US Social Security](http://www.ssa.gov/oact/babynames/limits.html)
+
+["Given names" extracted from WikiPedia](http://en.wikipedia.org/w/api.php?action=query&continue=&list=categorymembers&cmnamespace=0&cmlimit=500&cmtitle=Category:Given_names&format=json)
+
+[International names extracted from Baby Name Wizard](http://www.babynamewizard.com/international-names-lists-popular-names-from-around-the-world)
+
+Thank you US Social Security, WikiPedia and Baby Name Wizard! 
+
+### Passwords
+
+Passwords is a list of the 10.000 most used passwords according to Mark Burnett from [xato.net](http://xato.net).
+
+You can find the list (+1 with frequency) in [this blog post by Mark Burnett](https://xato.net/passwords/more-top-worst-passwords/).
+
+Thank you Mark Burnett!
