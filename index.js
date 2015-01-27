@@ -196,7 +196,7 @@ PasswordChecker.prototype.checkMaxLength = function() {
  * @return {Error} if no letters was found
  */
 PasswordChecker.prototype.checkLetters = function() {
-  var regex = new RegExp('['+this.allowed_letters+']');
+  var regex = new RegExp('['+this.allowed_letters.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
   if(!regex.test(this.password)) {
     return new Error('No letters found');
   }
@@ -207,7 +207,7 @@ PasswordChecker.prototype.checkLetters = function() {
  * @return {Error} if no numbers was found
  */
 PasswordChecker.prototype.checkNumbers = function() {
-  var regex = new RegExp('['+this.allowed_numbers+']');
+  var regex = new RegExp('['+this.allowed_numbers.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
   if(!regex.test(this.password)) {
     return new Error('No numbers found');
   }
@@ -218,7 +218,7 @@ PasswordChecker.prototype.checkNumbers = function() {
  * @return {Error} if no symbols was found
  */
 PasswordChecker.prototype.checkSymbols = function() {
-  var regex = new RegExp('['+this.allowed_symbols+']');
+  var regex = new RegExp('['+this.allowed_symbols.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
   if(!regex.test(this.password)) {
     return new Error('No symbols found');
   }
@@ -229,8 +229,8 @@ PasswordChecker.prototype.checkSymbols = function() {
  * @return {Error} if no numbers and/or symbols was found
  */
 PasswordChecker.prototype.checkNumbersOrSymbols = function() {
-  var regexNumbers = new RegExp('['+this.allowed_numbers+']');
-  var regexSymbols = new RegExp('['+this.allowed_symbols+']');
+  var regexNumbers = new RegExp('['+this.allowed_numbers.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
+  var regexSymbols = new RegExp('['+this.allowed_symbols.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
   if(!regexNumbers.test(this.password) && !regexSymbols.test(this.password)) {
     return new Error('No numbers or symbols found');
   }
