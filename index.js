@@ -67,21 +67,22 @@ PasswordChecker.prototype.check = function(password, cb) {
   this.password = password;
 
   if(this.min_length) {
-    this.rules.min_length = this.checkMinLength.bind(this);
+    this.addRule('min_length', this.checkMinLength.bind(this));
   } else delete this.rules.min_length;
 
   if(this.max_length) {
-    this.rules.max_length = this.checkMaxLength.bind(this);
+    this.addRule('max_length', this.checkMaxLength.bind(this));
   } else delete this.rules.max_length;
 
   for(var i in this.rules) {
-    var err = this.rules[i]();
+    var err = this.rules[i].method();
     if(err) {
       this.errors.push(err);
-      this.rules[i].failed = false;
+      this.rules[i].failed = true;
+      this.rules[i].error_message = err.message;
 
     } else {
-      this.rules[i].failed = true;
+      this.rules[i].failed = false;
     }
   }
 
@@ -89,6 +90,16 @@ PasswordChecker.prototype.check = function(password, cb) {
   return this.errors.length ? false : true;
 };
 
+PasswordChecker.prototype.addRule = function(name, method) {
+  if(!name) throw new Error('name is needed');
+  if(!method) throw new Error('method is needed');
+  this.rules[name] = {
+    name: name,
+    method: method,
+    error_message: null,
+    failed: null
+  };
+};
 
 /*************************************
  * Start of settings for the checker *
@@ -99,7 +110,7 @@ PasswordChecker.prototype.check = function(password, cb) {
  * @param  {boolean} active true|false
  */
 PasswordChecker.prototype.requireLetters = function(active) {
-  if(active) this.rules.require_letters = this.checkLetters.bind(this);
+  if(active) this.addRule('require_letters', this.checkLetters.bind(this));
   else delete this.rules.require_letters;
 };
 
@@ -108,7 +119,7 @@ PasswordChecker.prototype.requireLetters = function(active) {
  * @param  {boolean} active true|false
  */
 PasswordChecker.prototype.requireNumbers = function(active) {
-  if(active) this.rules.require_numbers = this.checkNumbers.bind(this);
+  if(active) this.addRule('require_numbers', this.checkNumbers.bind(this));
   else delete this.rules.require_numbers;
 };
 
@@ -117,7 +128,7 @@ PasswordChecker.prototype.requireNumbers = function(active) {
  * @param  {boolean} active true|false
  */
 PasswordChecker.prototype.requireSymbols = function(active) {
-  if(active) this.rules.require_symbols = this.checkSymbols.bind(this);
+  if(active) this.addRule('require_symbols', this.checkSymbols.bind(this));
   else delete this.rules.require_symbols;
 };
 
@@ -126,7 +137,7 @@ PasswordChecker.prototype.requireSymbols = function(active) {
  * @param  {boolean} active true|false
  */
 PasswordChecker.prototype.requireNumbersOrSymbols = function(active) {
-  if(active) this.rules.require_numbers_or_symbols = this.checkNumbersOrSymbols.bind(this);
+  if(active) this.addRule('require_numbers_or_symbols', this.checkNumbersOrSymbols.bind(this));
   else delete this.rules.require_numbers_or_symbols;
 };
 
@@ -137,7 +148,7 @@ PasswordChecker.prototype.requireNumbersOrSymbols = function(active) {
  * @param  {number}  len         Minimum length of words to check for if in_password == true
  */
 PasswordChecker.prototype.disallowNames = function(active, in_password, len) {
-  if(active) this.rules.disallow_names = this.checkNames.bind(this, !!in_password, len);
+  if(active) this.addRule('disallow_names', this.checkNames.bind(this, !!in_password, len));
   else delete this.rules.disallow_names;
 };
 
@@ -148,7 +159,7 @@ PasswordChecker.prototype.disallowNames = function(active, in_password, len) {
  * @param  {number}  len         Minimum length of words to check for if in_password == true
  */
 PasswordChecker.prototype.disallowWords = function(active, in_password, len) {
-  if(active) this.rules.disallow_words = this.checkWords.bind(this, !!in_password, len);
+  if(active) this.addRule('disallow_words', this.checkWords.bind(this, !!in_password, len));
   else delete this.rules.disallow_words;
 };
 
@@ -160,7 +171,7 @@ PasswordChecker.prototype.disallowWords = function(active, in_password, len) {
  */
 PasswordChecker.prototype.disallowPasswords = function(active, in_password, len) {
   len = (typeof len === 'undefined') ? len : 4;
-  if(active) this.rules.disallow_passwords = this.checkPasswords.bind(this, !!in_password, len);
+  if(active) this.addRule('disallow_passwords', this.checkPasswords.bind(this, !!in_password, len));
   else delete this.rules.disallow_passwords;
 };
 /***********************************
