@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Checker = require('../password-checker');
+var Checker = require('../');
 var checker = new Checker();
 
 describe('Default rules', function () {
