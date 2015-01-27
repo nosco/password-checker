@@ -1,7 +1,7 @@
 # password-checker
 
 ### How it works
-The checker works out of the box, but will accept any password at all.
+The checker works out of the box, but will accept any password.
 
 You need to enable rules and change the words lists, if you don't want to use the defaults.
 
