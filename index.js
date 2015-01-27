@@ -81,7 +81,7 @@ PasswordChecker.prototype.check = function(password, cb) {
   }
 
   if(cb) cb(this.errors.length ? this.errors : null);
-  return this.errors.length ? this.errors : null;
+  return this.errors.length ? false : true;
 };
 
 
