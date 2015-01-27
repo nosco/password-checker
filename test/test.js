@@ -44,9 +44,9 @@ describe('Check against numbers, letters and symbols', function () {
       checker.allowed_symbols = "_-";
     });
 
-    it('Should fail when missing letters', function () {
+    it('Should fail when missing allowed letters', function () {
       checker.requireLetters(true);
-      assert.notEqual(checker.check('123456789'), true, 'Password "123456789" should not pass');
+      assert.notEqual(checker.check('123456789ij'), true, 'Password "123456789ij" should not pass');
       checker.requireLetters(false);
     });
 
