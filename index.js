@@ -12,9 +12,9 @@ var PasswordChecker = function() {
   this.password = null;
 
   // Defaults
-  this.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  this.numbers = "0123456789";
-  this.symbols = "_-!\"?$%^&*()+={}[]:;@'~#|<>,.?\\/ ";
+  this.allowed_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  this.allowed_numbers = "0123456789";
+  this.allowed_symbols = "_-!\"?$%^&*()+={}[]:;@'~#|<>,.?\\/ ";
   this.words = words;
   this.names = names;
   this.passwords = passwords;
