@@ -1,8 +1,8 @@
-var trees = require('./trees.mod.js');
+var trees = require('./lib/trees.mod.js');
 
-var words = require('./norvig-10000.mod.js');
-var names = require('./all-names.mod.js');
-var passwords = require('./passwords-10000.mod.js');
+var words = require('./lib/norvig-10000.mod.js');
+var names = require('./lib/all-names.mod.js');
+var passwords = require('./lib/passwords-10000.mod.js');
 
 var PasswordChecker = function() {
   var self = this;
