@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Password Checker Demo</title>
+    <script type="text/javascript" src="../browser/password-checker.min.js"></script>
+    <script type="text/javascript">
+      var checker = new PasswordChecker();
+      checker.min_length = 4;
+      console.log('Trying: bla');
+      console.log(checker.check('bla'));
+      console.log(checker.errors);
+      if(typeof JSON !== 'undefined') {
+        console.log(JSON.stringify(checker.rules));
+      }
+
+      console.log('Trying: blayadda');
+      console.log(checker.check('blayadda'));
+      console.log(checker.errors);
+      if(typeof JSON !== 'undefined') {
+        console.log(JSON.stringify(checker.rules));
+      }
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
