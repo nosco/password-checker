@@ -1,7 +1,5 @@
 # password-checker
 
-This module enables to specify some rules and check passwords against them.
-
 ### How it works
 The checker works out of the box, but will accept any password at all.
 
