@@ -42,7 +42,7 @@ checker.requireNumbersOrSymbols(true);
 #### Disallow passwords containing words that are found in disallow list(s)
 Names, words and passwords checks works the same way.
 They can tak up to 3 parameters.
- 
+
 ```JavaScript
 // Disallow passwords that matches a full name
 checker.disallowNames(true);
@@ -93,12 +93,12 @@ console.log(checker.check('Should work'));
 // true
 
 console.log(checker.errors);
-// Prints: 
+// Prints:
 // []
 
 console.log(checker.rules);
 // Prints:
-// { min_length: 
+// { min_length:
 //    { name: 'min_length',
 //      method: [Function],
 //      error_message: null,
@@ -118,7 +118,7 @@ console.log(checker.errors);
 
 console.log(checker.rules);
 // Prints:
-// { min_length: 
+// { min_length:
 //    { name: 'min_length',
 //      method: [Function],
 //      error_message: 'The password is too short',
@@ -135,9 +135,9 @@ The entire list can be found here: [Natural Language Corpus Data: Beautiful Data
 
 Thank you Peter Norvig!
 
- 
+
 ### Names
-The names list is a mashup of different sources and contains 97871 international names:
+The names list is a mashup of different sources and contains 17956 common international names:
 
 [US Names from the US Social Security](http://www.ssa.gov/oact/babynames/limits.html)
 
@@ -145,7 +145,7 @@ The names list is a mashup of different sources and contains 97871 international
 
 [International names extracted from Baby Name Wizard](http://www.babynamewizard.com/international-names-lists-popular-names-from-around-the-world)
 
-Thank you US Social Security, WikiPedia and Baby Name Wizard! 
+Thank you US Social Security, WikiPedia and Baby Name Wizard!
 
 ### Passwords
 
