@@ -21,11 +21,27 @@ var PasswordChecker = function() {
   this.words_tree = trees.arrayToTree(this.words, true, 3);
   this.names_tree = trees.arrayToTree(this.names, true, 3);
   this.passwords_tree = trees.arrayToTree(this.passwords, true, 3);
-  this.min_length = 0;
-  this.max_length = 0;
+  this.minimum_length = 0;
+  this.maximum_length = 0;
 
   // Update word lists
   Object.defineProperties(this, {
+    'min_length': {
+      set: function(value) {
+        this.minimum_length = value;
+        if(value) {
+          this.addRule('min_length', this.checkMinLength.bind(this));
+        } else delete this.rules.min_length;
+      }
+    },
+    'max_length': {
+      set: function(value) {
+        this.maximum_length = value;
+        if(value) {
+          this.addRule('max_length', this.checkMaxLength.bind(this));
+        } else delete this.rules.max_length;
+      }
+    },
     'disallowed_words': {
       set: self.updateList.bind(self, 'words')
     },
@@ -66,13 +82,13 @@ PasswordChecker.prototype.check = function(password, cb) {
   this.errors = [];
   this.password = password;
 
-  if(this.min_length) {
-    this.addRule('min_length', this.checkMinLength.bind(this));
-  } else delete this.rules.min_length;
+  // if(this.minimum_length) {
+  //   this.addRule('min_length', this.checkMinLength.bind(this));
+  // } else delete this.rules.min_length;
 
-  if(this.max_length) {
-    this.addRule('max_length', this.checkMaxLength.bind(this));
-  } else delete this.rules.max_length;
+  // if(this.maximum_length) {
+  //   this.addRule('max_length', this.checkMaxLength.bind(this));
+  // } else delete this.rules.max_length;
 
   for(var i in this.rules) {
     var err = this.rules[i].method();
@@ -183,21 +199,21 @@ PasswordChecker.prototype.disallowPasswords = function(active, in_password, len)
  * Start of check methods *
  **************************/
 /**
- * Check if the password length is >= min_length
+ * Check if the password length is >= minimum_length
  * @return {Error} if the length is too short
  */
 PasswordChecker.prototype.checkMinLength = function() {
-  if(this.min_length && this.password.length < this.min_length) {
+  if(this.minimum_length && this.password.length < this.minimum_length) {
     return new Error('The password is too short');
   }
 };
 
 /**
- * Check if the password length is <= max_length
+ * Check if the password length is <= maximum_length
  * @return {Error} if the length is too long
  */
 PasswordChecker.prototype.checkMaxLength = function() {
-  if(this.max_length && this.password.length > this.max_length) {
+  if(this.maximum_length && this.password.length > this.maximum_length) {
     return new Error('The password is too long');
   }
 };

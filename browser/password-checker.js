@@ -117989,6 +117989,19 @@ PasswordChecker.prototype.updateList = function(list_name, list) {
   this[list_name+'_tree'] = arrayToTree(this[list_name], true);
 };
 
+/**
+ * Update length rules - needed due to IE not having Object.defineProperties available for non DOM objects
+ */
+PasswordChecker.prototype.updateLengthRules = function() {
+  if(this.min_length) {
+    this.addRule('min_length', this.checkMinLength.bind(this));
+  } else delete this.rules.min_length;
+
+  if(this.max_length) {
+    this.addRule('max_length', this.checkMaxLength.bind(this));
+  } else delete this.rules.max_length;
+};
+
 
 /**
  * Check a password by running any rules set
