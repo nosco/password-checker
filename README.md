@@ -39,6 +39,13 @@ checker.requireLetters(true);
 checker.requireNumbersOrSymbols(true);
 ```
 
+#### Require ONLY the letters, numbers and symbols set in the allowed_x lists
+```JavaScript
+checker.checkLetters(true);
+checker.checkNumbers(true);
+checker.checkSymbols(true);
+```
+
 #### Disallow passwords containing words that are found in disallow list(s)
 Names, words and passwords checks works the same way.
 They can tak up to 3 parameters.
