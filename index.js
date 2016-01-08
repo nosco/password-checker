@@ -29,17 +29,21 @@ var PasswordChecker = function() {
     'min_length': {
       set: function(value) {
         this.minimum_length = value;
-        if(value) {
+        if (value) {
           this.addRule('min_length', this.checkMinLength.bind(this));
-        } else delete this.rules.min_length;
+        } else {
+          delete this.rules.min_length;
+        }
       }
     },
     'max_length': {
       set: function(value) {
         this.maximum_length = value;
-        if(value) {
+        if (value) {
           this.addRule('max_length', this.checkMaxLength.bind(this));
-        } else delete this.rules.max_length;
+        } else {
+          delete this.rules.max_length;
+        }
       }
     },
     'disallowed_words': {
@@ -65,10 +69,10 @@ module.exports = PasswordChecker;
  */
 PasswordChecker.prototype.updateList = function(list_name, list) {
   this[list_name] = list;
-  for(var i in this[list_name]) {
+  for (var i in this[list_name]) {
     this[list_name][i] = this[list_name][i].toLowerCase()
   }
-  this[list_name+'_tree'] = trees.arrayToTree(this[list_name], true);
+  this[list_name + '_tree'] = trees.arrayToTree(this[list_name], true);
 };
 
 
@@ -90,9 +94,9 @@ PasswordChecker.prototype.check = function(password, cb) {
   //   this.addRule('max_length', this.checkMaxLength.bind(this));
   // } else delete this.rules.max_length;
 
-  for(var i in this.rules) {
+  for (var i in this.rules) {
     var err = this.rules[i].method();
-    if(err) {
+    if (err) {
       this.errors.push(err);
       this.rules[i].failed = true;
       this.rules[i].error_message = err.message;
@@ -102,13 +106,19 @@ PasswordChecker.prototype.check = function(password, cb) {
     }
   }
 
-  if(cb) cb(this.errors.length ? this.errors : null);
+  if (cb) {
+    cb(this.errors.length ? this.errors : null);
+  }
   return this.errors.length ? false : true;
 };
 
 PasswordChecker.prototype.addRule = function(name, method) {
-  if(!name) throw new Error('name is needed');
-  if(!method) throw new Error('method is needed');
+  if (!name) {
+    throw new Error('name is needed');
+  }
+  if (!method) {
+    throw new Error('method is needed');
+  }
   this.rules[name] = {
     name: name,
     method: method,
@@ -122,39 +132,87 @@ PasswordChecker.prototype.addRule = function(name, method) {
  *************************************/
 
 /**
- * Should check that the password has letters in it?
+ * Should check that the password only has letters from allowed_letters in it
+ * @param  {boolean} active true|false
+ */
+PasswordChecker.prototype.checkLetters = function(active) {
+  if (active) {
+    this.addRule('check_letters', this.checkAllowedLetters.bind(this));
+  } else {
+    delete this.rules.check_letters;
+  }
+};
+
+/**
+ * Should check that the password only has numbers from allowed_letters in it
+ * @param  {boolean} active true|false
+ */
+PasswordChecker.prototype.checkNumbers = function(active) {
+  if (active) {
+    this.addRule('check_numbers', this.checkAllowedNumbers.bind(this));
+  } else {
+    delete this.rules.check_numbers;
+  }
+};
+
+/**
+ * Should check that the password only has symbols from allowed_letters in it
+ * @param  {boolean} active true|false
+ */
+PasswordChecker.prototype.checkSymbols = function(active) {
+  if (active) {
+    this.addRule('check_symbols', this.checkAllowedSymbols.bind(this));
+  } else {
+    delete this.rules.check_symbols;
+  }
+};
+
+/**
+ * Should check that the password has letters in it
  * @param  {boolean} active true|false
  */
 PasswordChecker.prototype.requireLetters = function(active) {
-  if(active) this.addRule('require_letters', this.checkLetters.bind(this));
-  else delete this.rules.require_letters;
+  if (active) {
+    this.addRule('require_letters', this.checkRequireLetters.bind(this));
+  } else {
+    delete this.rules.require_letters;
+  }
 };
 
 /**
- * Should check that the password has numbers in it?
+ * Should check that the password has numbers in it
  * @param  {boolean} active true|false
  */
 PasswordChecker.prototype.requireNumbers = function(active) {
-  if(active) this.addRule('require_numbers', this.checkNumbers.bind(this));
-  else delete this.rules.require_numbers;
+  if (active) {
+    this.addRule('require_numbers', this.checkRequireNumbers.bind(this));
+  } else {
+    delete this.rules.require_numbers;
+  }
 };
 
 /**
- * Should check that the password has symbols in it?
+ * Should check that the password has symbols in it
  * @param  {boolean} active true|false
  */
 PasswordChecker.prototype.requireSymbols = function(active) {
-  if(active) this.addRule('require_symbols', this.checkSymbols.bind(this));
-  else delete this.rules.require_symbols;
+  if (active) {
+    this.addRule('require_symbols', this.checkRequireSymbols.bind(this));
+  } else {
+    delete this.rules.require_symbols;
+  }
 };
 
 /**
- * Should check that the password has numbers OR symbols in it?
+ * Should check that the password has numbers OR symbols in it
  * @param  {boolean} active true|false
  */
 PasswordChecker.prototype.requireNumbersOrSymbols = function(active) {
-  if(active) this.addRule('require_numbers_or_symbols', this.checkNumbersOrSymbols.bind(this));
-  else delete this.rules.require_numbers_or_symbols;
+  if (active) {
+    this.addRule('require_numbers_or_symbols', this.checkRequireNumbersOrSymbols.bind(this));
+  } else {
+    delete this.rules.require_numbers_or_symbols;
+  }
 };
 
 /**
@@ -164,8 +222,11 @@ PasswordChecker.prototype.requireNumbersOrSymbols = function(active) {
  * @param  {number}  len         Minimum length of words to check for if in_password == true
  */
 PasswordChecker.prototype.disallowNames = function(active, in_password, len) {
-  if(active) this.addRule('disallow_names', this.checkNames.bind(this, !!in_password, len));
-  else delete this.rules.disallow_names;
+  if (active) {
+    this.addRule('disallow_names', this.checkNames.bind(this, !!in_password, len));
+  } else {
+    delete this.rules.disallow_names;
+  }
 };
 
 /**
@@ -175,8 +236,11 @@ PasswordChecker.prototype.disallowNames = function(active, in_password, len) {
  * @param  {number}  len         Minimum length of words to check for if in_password == true
  */
 PasswordChecker.prototype.disallowWords = function(active, in_password, len) {
-  if(active) this.addRule('disallow_words', this.checkWords.bind(this, !!in_password, len));
-  else delete this.rules.disallow_words;
+  if (active) {
+    this.addRule('disallow_words', this.checkWords.bind(this, !!in_password, len));
+  } else {
+    delete this.rules.disallow_words;
+  }
 };
 
 /**
@@ -187,8 +251,11 @@ PasswordChecker.prototype.disallowWords = function(active, in_password, len) {
  */
 PasswordChecker.prototype.disallowPasswords = function(active, in_password, len) {
   len = (typeof len === 'undefined') ? len : 4;
-  if(active) this.addRule('disallow_passwords', this.checkPasswords.bind(this, !!in_password, len));
-  else delete this.rules.disallow_passwords;
+  if (active) {
+    this.addRule('disallow_passwords', this.checkPasswords.bind(this, !!in_password, len));
+  } else {
+    delete this.rules.disallow_passwords;
+  }
 };
 /***********************************
  * End of settings for the checker *
@@ -203,7 +270,7 @@ PasswordChecker.prototype.disallowPasswords = function(active, in_password, len)
  * @return {Error} if the length is too short
  */
 PasswordChecker.prototype.checkMinLength = function() {
-  if(this.minimum_length && this.password.length < this.minimum_length) {
+  if (this.minimum_length && this.password.length < this.minimum_length) {
     return new Error('The password is too short');
   }
 };
@@ -213,52 +280,85 @@ PasswordChecker.prototype.checkMinLength = function() {
  * @return {Error} if the length is too long
  */
 PasswordChecker.prototype.checkMaxLength = function() {
-  if(this.maximum_length && this.password.length > this.maximum_length) {
+  if (this.maximum_length && this.password.length > this.maximum_length) {
     return new Error('The password is too long');
   }
 };
 
 /**
- * Check that the password has letters
- * @return {Error} if no letters was found
+ * Check that the password only has allowed letters
+ * @return {Error} if disallowed letters were found
  */
-PasswordChecker.prototype.checkLetters = function() {
-  var regex = new RegExp('['+this.allowed_letters.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
-  if(!regex.test(this.password)) {
+PasswordChecker.prototype.checkAllowedLetters = function() {
+  var regex = new RegExp('^[' + this.allowed_letters.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&") + ']*$');
+  if (!regex.test(this.password.replace(/[^a-zA-Z]/g, ""))) {
+    return new Error('Letters found that are not allowed');
+  }
+};
+
+/**
+ * Check that the password only has allowed numbers
+ * @return {Error} if disallowed numbers were found
+ */
+PasswordChecker.prototype.checkAllowedNumbers = function() {
+  var regex = new RegExp('^[' + this.allowed_numbers.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&") + ']*$');
+  if (!regex.test(this.password.replace(/[^0-9]/g, ""))) {
+    return new Error('Numbers found that are not allowed');
+  }
+};
+
+/**
+ * Check that the password only has allowed symbols
+ * @return {Error} if disallowed symbols were found
+ */
+PasswordChecker.prototype.checkAllowedSymbols = function() {
+  var regex = new RegExp('^[' + this.allowed_symbols.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&") + ']*$');
+  if (!regex.test(this.password.replace(/[a-zA-Z0-9]/g, ""))) {
+    return new Error('Symbols found that are now allowed');
+  }
+};
+
+/**
+ * Check that the password has letters
+ * @return {Error} if no letters were found
+ */
+PasswordChecker.prototype.checkRequireLetters = function() {
+  var regex = new RegExp('[' + this.allowed_letters.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&") + ']');
+  if (!regex.test(this.password)) {
     return new Error('No letters found');
   }
 };
 
 /**
  * Check that the password has numbers
- * @return {Error} if no numbers was found
+ * @return {Error} if no numbers were found
  */
-PasswordChecker.prototype.checkNumbers = function() {
-  var regex = new RegExp('['+this.allowed_numbers.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
-  if(!regex.test(this.password)) {
+PasswordChecker.prototype.checkRequireNumbers = function() {
+  var regex = new RegExp('[' + this.allowed_numbers.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&") + ']');
+  if (!regex.test(this.password)) {
     return new Error('No numbers found');
   }
 };
 
 /**
  * Check that the password has symbols
- * @return {Error} if no symbols was found
+ * @return {Error} if no symbols were found
  */
-PasswordChecker.prototype.checkSymbols = function() {
-  var regex = new RegExp('['+this.allowed_symbols.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
-  if(!regex.test(this.password)) {
+PasswordChecker.prototype.checkRequireSymbols = function() {
+  var regex = new RegExp('[' + this.allowed_symbols.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&") + ']');
+  if (!regex.test(this.password)) {
     return new Error('No symbols found');
   }
 };
 
 /**
  * Check that the password has numbers and/or symbols
- * @return {Error} if no numbers and/or symbols was found
+ * @return {Error} if no numbers and/or symbols were found
  */
-PasswordChecker.prototype.checkNumbersOrSymbols = function() {
-  var regexNumbers = new RegExp('['+this.allowed_numbers.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
-  var regexSymbols = new RegExp('['+this.allowed_symbols.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")+']');
-  if(!regexNumbers.test(this.password) && !regexSymbols.test(this.password)) {
+PasswordChecker.prototype.checkRequireNumbersOrSymbols = function() {
+  var regexNumbers = new RegExp('[' + this.allowed_numbers.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&") + ']');
+  var regexSymbols = new RegExp('[' + this.allowed_symbols.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&") + ']');
+  if (!regexNumbers.test(this.password) && !regexSymbols.test(this.password)) {
     return new Error('No numbers or symbols found');
   }
 };
@@ -267,12 +367,12 @@ PasswordChecker.prototype.checkNumbersOrSymbols = function() {
  * Check if password is a name from the disallowed names list
  * @param  {boolean} in_password     Also check if names are in the password
  * @param  {number}  min_word_length Minimum length of words to check for if in_password == true
- * @return {Error}                   If any matches was found
+ * @return {Error}                   If any matches were found
  */
 PasswordChecker.prototype.checkNames = function(in_password, min_word_length) {
-  if(in_password && this.hasWordInList(this.names, min_word_length)) {
+  if (in_password && this.hasWordInList(this.names, min_word_length)) {
     return new Error('Password includes name from disallowed list');
-  } else if(this.wordInList(this.names_tree)) {
+  } else if (this.wordInList(this.names_tree)) {
     return new Error('Password is in disallowed names list');
   }
 };
@@ -281,12 +381,12 @@ PasswordChecker.prototype.checkNames = function(in_password, min_word_length) {
  * Check if password is a word from the disallowed words list
  * @param  {boolean} in_password    Also check if words are in the password
  * @param  {number} min_word_length Minimum length of words to check for if in_password == true
- * @return {Error}                  If any matches was found
+ * @return {Error}                  If any matches were found
  */
 PasswordChecker.prototype.checkWords = function(in_password, min_word_length) {
-  if(in_password && this.hasWordInList(this.words, min_word_length)) {
+  if (in_password && this.hasWordInList(this.words, min_word_length)) {
     return new Error('Password includes word from disallowed list');
-  } else if(this.wordInList(this.words_tree)) {
+  } else if (this.wordInList(this.words_tree)) {
     return new Error('Password is in disallowed words list');
   }
 };
@@ -295,12 +395,12 @@ PasswordChecker.prototype.checkWords = function(in_password, min_word_length) {
  * Check if password is a password from the disallowed passwords list
  * @param  {boolean} in_password    Also check if words are in the password
  * @param  {number} min_word_length Minimum length of words to check for if in_password == true
- * @return {Error}                  If any matches was found
+ * @return {Error}                  If any matches were found
  */
 PasswordChecker.prototype.checkPasswords = function(in_password, min_word_length) {
-  if(in_password && this.hasWordInList(this.passwords, min_word_length)) {
+  if (in_password && this.hasWordInList(this.passwords, min_word_length)) {
     return new Error('Password includes password from disallowed list');
-  } else if(this.wordInList(this.passwords_tree)) {
+  } else if (this.wordInList(this.passwords_tree)) {
     return new Error('Password is in disallowed passwords list');
   }
 };
@@ -318,8 +418,8 @@ PasswordChecker.prototype.checkPasswords = function(in_password, min_word_length
 PasswordChecker.prototype.hasWordInList = function(list, min_word_length) {
   min_word_length = (typeof min_word_length !== 'undefined') ? min_word_length : 4;
   var str = this.password.toLowerCase();
-  for(var i in list) {
-    if(list[i].length >= min_word_length && str.indexOf(list[i]) !== -1) {
+  for (var i in list) {
+    if (list[i].length >= min_word_length && str.indexOf(list[i]) !== -1) {
       return true;
     }
   }
@@ -333,6 +433,8 @@ PasswordChecker.prototype.hasWordInList = function(list, min_word_length) {
  */
 PasswordChecker.prototype.wordInList = function(list_tree) {
   var str = this.password.toLowerCase();
-  if(trees.inTree(str, list_tree)) return true;
+  if (trees.inTree(str, list_tree)) {
+    return true;
+  }
   return false;
 };
