@@ -38297,7 +38297,7 @@ PasswordChecker.prototype.disallowPasswords = function(active, in_password, len)
  * @return {Error} if the length is too short
  */
 PasswordChecker.prototype.checkMinLength = function() {
-  if (this.minimum_length && this.password.length < this.minimum_length) {
+  if (this.min_length && this.password.length < this.min_length) {
     return new Error('The password is too short');
   }
 };
@@ -38307,7 +38307,7 @@ PasswordChecker.prototype.checkMinLength = function() {
  * @return {Error} if the length is too long
  */
 PasswordChecker.prototype.checkMaxLength = function() {
-  if (this.maximum_length && this.password.length > this.maximum_length) {
+  if (this.max_length && this.password.length > this.max_length) {
     return new Error('The password is too long');
   }
 };
@@ -38460,8 +38460,8 @@ PasswordChecker.prototype.hasWordInList = function(list, min_word_length) {
  */
 PasswordChecker.prototype.wordInList = function(list_tree) {
   var str = this.password.toLowerCase();
-	if(inTree(str, list_tree)) {
-		return true;
-	}
-	return false;
+  if (inTree(str, list_tree)) {
+    return true;
+  }
+  return false;
 };
