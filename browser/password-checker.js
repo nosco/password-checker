@@ -26,10 +26,8 @@ function arrayToTree(arr, lowerCase, len) {
       treeRef = treeRef[chr];
     }
   }
-
   return tree;
 }
-;
 
 function inTree(name, tree) {
   var chars = name.split('');
@@ -42,7 +40,6 @@ function inTree(name, tree) {
   }
   return !!(treeRef['$'] !== null);
 }
-;
 
 var words = [
   "the",
