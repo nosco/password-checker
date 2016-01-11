@@ -38463,8 +38463,8 @@ PasswordChecker.prototype.hasWordInList = function(list, min_word_length) {
  */
 PasswordChecker.prototype.wordInList = function(list_tree) {
   var str = this.password.toLowerCase();
-  if (trees.inTree(str, list_tree)) {
-    return true;
-  }
-  return false;
+	if(inTree(str, list_tree)) {
+		return true;
+	}
+	return false;
 };
