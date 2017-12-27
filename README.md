@@ -23,7 +23,7 @@ checker.min_length = 8;
 
 // Change maximum length required
 // Default is: 0, which is effectively disabling of the check
-checker.min_length = 20;
+checker.max_length = 120;
 ```
 
 #### Require letters, numbers and symbols
